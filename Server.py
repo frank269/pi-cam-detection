@@ -12,4 +12,5 @@ while True:
     image = cv2.imdecode(np.frombuffer(jpg_buffer, dtype='uint8'), -1)
     if image is not None:
         cv2.imshow(rpi_name, image)
+    cv2.waitKey(1)
     image_hub.send_reply(b'OK')

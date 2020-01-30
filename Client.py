@@ -21,7 +21,3 @@ while True:
     ret_code, jpg_buffer = cv2.imencode(
         ".jpg", image, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
     sender.send_jpg(rpi_name, jpg_buffer)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-cap.release()
