@@ -1,13 +1,19 @@
 import sys
 sys.path.insert(0, './imagezmq')
-
+import argparse
 import socket
 import time
 import cv2
 from imutils.video import VideoStream
 import imagezmq
 
-sender = imagezmq.ImageSender(connect_to='tcp://192.168.1.25:5555')
+
+ap = argparse.ArgumentParser()
+ap.add_argument("-s", "--server-ip", required=True,
+	help="ip address of the server to which the client will connect")
+args = vars(ap.parse_args())
+
+sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(args["server_ip"]))
 
 rpi_name = socket.gethostname()  # send RPi hostname with each image
 # picam = VideoStream(usePiCamera=True).start()
