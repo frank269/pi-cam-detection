@@ -1,0 +1,11 @@
+opencv-contrib-python
+zmq
+numpy
+tensorflow==1.15.2
+scipy==1.1.0
+scikit-learn
+h5py
+matplotlib
+Pillow
+requests
+psutil
