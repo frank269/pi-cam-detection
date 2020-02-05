@@ -22,32 +22,26 @@ from faceHandling.faceRecognition import *
 # 	help="montage frame height")
 # args = vars(ap.parse_args())
 
-image_hub = imagezmq.ImageHub()
-detection = Detection()
-recognition = Recognition()
+with tf.Graph().as_default():
+    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.6)
+    sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
+    with sess.as_default():
+        image_hub = imagezmq.ImageHub()
+        # detection = Detection()
+        recognition = Recognition(sess)
 
-start_time = time.time()
-while True:
-    rpi_name, jpg_buffer = image_hub.recv_jpg()
-    image = cv2.imdecode(np.frombuffer(jpg_buffer, dtype='uint8'), -1)
-    image_hub.send_reply(b'OK')
-    if image is not None:
-        boxes = detection.getFace(image)
-        name = recognition.recognize_face(image)
-        emotion = recognition.recognize_emotion(image)
+        start_time = time.time()
+        while True:
+            rpi_name, jpg_buffer = image_hub.recv_jpg()
+            image = cv2.imdecode(np.frombuffer(jpg_buffer, dtype='uint8'), -1)
+            image_hub.send_reply(b'OK')
+            if image is not None:
+                name, bbox, image = recognition.recognize_face(image)
+                # emotion = recognition.recognize_emotion(image)
 
-        for (startX, startY, endX, endY) in boxes:
-            text = name
-            y = startY - 10 if startY - 10 > 10 else startY + 10
-            cv2.rectangle(image, (startX, startY), (endX, endY),
-                (0, 0, 255), 2)
-            cv2.putText(image, text, (startX, y),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+                if name is not None:
+                    print(name, bbox)
 
-        cv2.putText(image, rpi_name, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-        cv2.imshow(rpi_name, image)
-        # if time.time() - start_time > 1 :
-        #     start_time = time.time()
-        #     filename = "./faceHandling/data1/img{}.jpg".format(start_time)
-        #     cv2.imwrite(filename,image)
-    cv2.waitKey(1)
+                # cv2.putText(image, rpi_name, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                cv2.imshow(rpi_name, image)
+            cv2.waitKey(1)
