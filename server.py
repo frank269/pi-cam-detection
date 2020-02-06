@@ -6,8 +6,11 @@ import numpy as np
 import cv2
 import imagezmq
 import time
-from faceHandling.faceDetection import *
 from faceHandling.faceRecognition import *
+from outputHandling.textToSpeak import TTS
+from inputHandling.userInfomation import User
+
+from datetime import datetime
 
 # ap = argparse.ArgumentParser()
 # ap.add_argument("-p", "--prototxt", required=True,
@@ -27,10 +30,13 @@ with tf.Graph().as_default():
     sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options, log_device_placement=False))
     with sess.as_default():
         image_hub = imagezmq.ImageHub()
-        # detection = Detection()
         recognition = Recognition(sess)
+        tts = TTS()
+        users = User.getFakeData()
 
         start_time = time.time()
+        last_name = ""
+        match_count = 0
         while True:
             rpi_name, jpg_buffer = image_hub.recv_jpg()
             image = cv2.imdecode(np.frombuffer(jpg_buffer, dtype='uint8'), -1)
@@ -41,6 +47,19 @@ with tf.Graph().as_default():
 
                 if name is not None:
                     print(name, bbox)
+                    if name == last_name:
+                        match_count += 1
+                        if match_count > 3:
+                            user = users.get(name)
+                            if user is not None and user.checkinTime is None:
+                                user.checkinTime = datetime.now()
+                                user.checkinFace = image[bbox[1]:bbox[3], bbox[0]:bbox[2], :]
+                                cv2.imshow(name, user.checkinFace)
+                                tts.speak(user.getMessage())
+                                users[name] = user
+                    else:
+                        match_count = 0
+                        last_name = name
 
                 # cv2.putText(image, rpi_name, (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
                 cv2.imshow(rpi_name, image)

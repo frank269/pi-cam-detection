@@ -19,6 +19,7 @@ if not os.path.exists(directory):
     os.makedirs(directory)
 cap = cv2.VideoCapture(0)
 start_time = time.time()
+time.sleep(1)
 while True:
     _, image = cap.read()
     if image is not None:
