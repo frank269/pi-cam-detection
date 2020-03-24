@@ -13,7 +13,7 @@ ap.add_argument("-s", "--server-ip", required=True,
 	help="ip address of the server to which the client will connect")
 args = vars(ap.parse_args())
 
-sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(args["server_ip"]))
+sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(args["server_ip"]), REQ_REP = True)
 
 rpi_name = socket.gethostname()  # send RPi hostname with each image
 # picam = VideoStream(usePiCamera=True).start()
@@ -26,4 +26,6 @@ while True:
     ret, image = cap.read()
     ret_code, jpg_buffer = cv2.imencode(
         ".jpg", image, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
-    sender.send_jpg(rpi_name, jpg_buffer)
+    result = sender.send_jpg(rpi_name, jpg_buffer)
+    if result is not None and result != b'OK':
+        print(result)

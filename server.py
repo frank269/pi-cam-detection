@@ -47,6 +47,7 @@ with tf.Graph().as_default():
 
                 if name is not None:
                     print(name, bbox)
+                    image_hub.send_reply(b'OK')
                     if name == last_name:
                         match_count += 1
                         if match_count > 3:
@@ -57,6 +58,7 @@ with tf.Graph().as_default():
                                 cv2.imshow(name, user.checkinFace)
                                 tts.speak(user.getMessage())
                                 users[name] = user
+                                # image_hub.send_reply(name)
                     else:
                         match_count = 0
                         last_name = name

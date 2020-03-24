@@ -17,4 +17,4 @@ class TTS:
         tts = gTTS(text= msg, lang='vi')
         tts.save("speak.mp3")
         # playsound.playsound('speak.mp3', True)
-        os.system("start speak.mp3")
+        os.system("open speak.mp3")

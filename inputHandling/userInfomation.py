@@ -29,10 +29,11 @@ class User:
 
     def getFakeData():
         users = {}
-        users["tien"] = User("Anh", "Đoàn Cảnh Tiền", "Mobile Developer",workNeedDone="release version mới")
+        users["Tien"] = User("Anh", "Đoàn Cảnh Tiền", "Mobile Developer",workNeedDone="release version mới")
         users["manh"] =  User("Anh", "Dương Văn Mạnh", "CRM Developer",workNeedDone="Fix bug màn hình import lead")
         users["ngoc"] =  User("Anh", "Tuấn Ngọc", "AI Intern Developer",workNeedDone="Hoàn thành hàm nhận diện khuôn mặt")
         users["tuananh"] =  User("Anh", "Lê Tuấn Anh", "CRM Developer",workNeedDone="Fix bug trí nam")
-        users["sang"] =  User("Anh", "Sang", "CRM Developer",workNeedDone="Fix bug crm")
+        users["namAnh"] =  User("Anh", "Nam Anh", "CRM Developer",workNeedDone="Fix bug crm")
+        users["Dat"] =  User("Anh", "Trần Quốc Đạt", "CRM Developer",workNeedDone="Fix bug crm")
 
         return users
