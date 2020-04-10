@@ -1,5 +1,4 @@
-raw/
-processed/
+Data/
 env
 .vscode
 Models/
