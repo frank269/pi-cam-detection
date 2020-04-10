@@ -47,7 +47,6 @@ with tf.Graph().as_default():
 
                 if name is not None:
                     print(name, bbox)
-                    image_hub.send_reply(b'OK')
                     if name == last_name:
                         match_count += 1
                         if match_count > 3:

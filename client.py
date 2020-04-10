@@ -24,8 +24,9 @@ jpeg_quality = 95  # 0 to 100, higher is better quality, 95 is cv2 default
 while True:
     # image = picam.read()
     ret, image = cap.read()
+    if image is None:
+        continue
     ret_code, jpg_buffer = cv2.imencode(
         ".jpg", image, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
     result = sender.send_jpg(rpi_name, jpg_buffer)
-    if result is not None and result != b'OK':
-        print(result)
+    time.sleep(0.3)

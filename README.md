@@ -14,3 +14,8 @@ python FaceNet/align_dataset_mtcnn.py Data/FaceData/raw Data/FaceData/processed 
 
 # Trainning model
 python FaceNet/classifier.py TRAIN Data/FaceData/processed Models/20180402-114759.pb Models/facemodel.pkl
+
+
+# reset pi-cam
+sudo rmmod uvcvideo
+sudo modprobe uvcvideo nodrop=1 timeout=5000 quirks=0x80

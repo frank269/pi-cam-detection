@@ -19,7 +19,20 @@ from .config import *
 
 class Recognition:
 
-    def __init__(self, sess):
+    def __init__(self):
+        self.isEnviromentOk = False
+        print("init")
+
+    def isEnviromentOk(self):
+        return self.isEnviromentOk
+
+    def loadModel(self):
+        print('Loading feature extraction model')
+        facenet.load_model(FACENET_MODEL_PATH)
+        self.isEnviromentOk = True
+
+
+    def setup_Enviroment(self, sess):
         self.sess = sess
         print("Face Recognition Init!")
         with open(CLASSIFIER_PATH, 'rb') as file:
@@ -27,8 +40,8 @@ class Recognition:
         print("Custom Classifier, Successfully loaded")
         
         # Load the model
-        print('Loading feature extraction model')
-        facenet.load_model(FACENET_MODEL_PATH)
+        # print('Loading feature extraction model')
+        # facenet.load_model(FACENET_MODEL_PATH)
 
         # Get input and output tensors
         self.images_placeholder = tf.get_default_graph().get_tensor_by_name("input:0")
